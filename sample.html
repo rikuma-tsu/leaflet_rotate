@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1" />
+<title>Leaflet 地図を表示</title>
+<!-- <link rel="stylesheet" href="js/leaflet.css" /> -->
+<!-- <script src="js/leaflet.js"></script> -->
+<script src="https://unpkg.com/leaflet@1.7/dist/leaflet-src.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7/dist/leaflet.css">
+<style type="text/css">
+#map {
+    position:absolute;
+    top:0; left:0; right:0; bottom:0;
+}
+</style>
+<script src="src/leaflet_rotate_changed.js"></script>
+<script type="text/javascript" charset="UTF-8">
+// function init() {
+//     var image_url = "i083.jpg";
+//     var bounds = L.latLngBounds(
+//         [36.980, 136.59]
+//         [36.645, 137.31],
+//     );
+
+//     let map = L.map('map_container');
+//     map.setView([36.9, 137.0], 9);
+//     L.tileLayer("https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",{
+//         attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html'"
+//         + " target='_blank'>地理院標準地図</a>"
+//     }).addTo(map); // 地理院地図を表示
+
+//     L.imageOverlay(image_url, bounds, {
+//         attribution: "<a href='https://kochizu.gsi.go.jp/items/376'>古地図コレクション</a>",
+//     }).addTo(map);
+//     map.setView([37,136.5], 6); // 日本を表示
+// }
+</script>
+</head>
+<body>
+    <div id="map"></div>
+
+    <hr>
+
+    <script>
+        var image_url = "i083.jpg";
+        var bounds = L.latLngBounds(
+            [36.980, 136.59],
+            [36.645, 137.31],
+        );
+
+        var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            id: 'mapbox.streets',
+            maxZoom: 24,
+            maxNativeZoom: 18,
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        });
+
+        var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 24,
+            maxNativeZoom: 19,
+            attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        });
+
+        var map = L.map('map', {
+            center: [55, 10],
+            zoom: 2,
+            layers: [osm],
+            // worldCopyJump: true,
+            rotate: true,
+            touchRotate: true,
+            rotateControl: {
+                closeOnZeroBearing: false
+            },
+            bearing: 0,
+        });
+
+        // map.setBearing(30);
+        // map.touchRotate.enable();
+
+        var layers = L.control.layers({
+            'Empty': L.tileLayer(''),
+            'Streets': osm,
+            'Satellite': esri,
+        }, null, {
+            collapsed: false
+        }).addTo(map);
+
+        map.setView([36.9, 137.0], 9);
+
+        L.imageOverlay(image_url, bounds, {
+        attribution: "<a href='https://kochizu.gsi.go.jp/items/376'>古地図コレクション</a>",
+        }).addTo(map);
+
+    </script>
+</body>
+</html>
